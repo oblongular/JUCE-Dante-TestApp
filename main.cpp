@@ -128,7 +128,7 @@ int main (int argc, char* argv[])
 
     // Parse arguments
     juce::String loopbackDevice;
-    int txLatencyUs = -1;   // -1 = use backend default
+    unsigned txLatencyUs = 1000;   // default matches kDefaultTxLatencyUs in juce_Dante.cpp
 
     for (int i = 1; i < argc; ++i)
     {
@@ -136,7 +136,7 @@ int main (int argc, char* argv[])
         if (arg == "-l" && i + 1 < argc)
             loopbackDevice = argv[++i];
         else if (arg == "-t" && i + 1 < argc)
-            txLatencyUs = std::atoi (argv[++i]);
+            txLatencyUs = (unsigned) std::atoi (argv[++i]);
         else
         {
             juce::String bin (argv[0]);
@@ -160,8 +160,7 @@ int main (int argc, char* argv[])
     }
     else
     {
-        if (txLatencyUs >= 0)
-            juce::setDanteTxLatencyUs ((unsigned) txLatencyUs);
+        juce::setDanteTxLatencyUs (txLatencyUs);
 
         Loopback loopback;
         manager.addAudioCallback (&loopback);
@@ -180,7 +179,8 @@ int main (int argc, char* argv[])
                   << "  Sample rate : " << device->getCurrentSampleRate() << " Hz\n"
                   << "  Buffer size : " << device->getCurrentBufferSizeSamples() << " samples\n"
                   << "  Inputs      : " << device->getActiveInputChannels().countNumberOfSetBits() << "\n"
-                  << "  Outputs     : " << device->getActiveOutputChannels().countNumberOfSetBits() << "\n";
+                  << "  Outputs     : " << device->getActiveOutputChannels().countNumberOfSetBits() << "\n"
+                  << "  TX latency  : " << txLatencyUs << " us\n";
 
         while (gRunning)
             juce::Thread::sleep (100);

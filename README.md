@@ -72,13 +72,13 @@ If the Dante Embedded Platform is not running, the Dante entry will appear as `0
 ./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l <device-name> -t <microseconds>
 ```
 
-The `-t` option sets the Dante TX latency in microseconds (default: 370 µs).
+The `-t` option sets the Dante TX latency in microseconds (default: 1000µs).
 Lower values reduce loopback latency but increase the risk of glitches.
 
-At 48 kHz, 1 sample ≈ 21 µs. The DepLoopback reference application uses 17 samples ≈ 354 µs:
+To use 32 samples @ 48kHz (i.e. 667µs), we can run the test app like so:
 
 ```sh
-./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l Dante -t 354
+rt-run-dsp.sh /tmp/JUCE-Dante-TestApp -l Dante -t 667
 ```
 
 Press `Ctrl+C` to stop the loopback.
@@ -88,4 +88,4 @@ Press `Ctrl+C` to stop the loopback.
 | Option | Description |
 |---|---|
 | `-l <name>` | Device name to use for loopback |
-| `-t <us>` | Dante TX latency in microseconds (default: 370) |
+| `-t <us>` | Dante TX latency in microseconds (default: 1000) |
