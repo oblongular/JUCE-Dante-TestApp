@@ -9,7 +9,10 @@ add_subdirectory(../JUCE juce)
 
 juce_add_console_app(JUCE-Dante-TestApp PRODUCT_NAME "JUCE Dante Test App")
 
-target_sources(JUCE-Dante-TestApp PRIVATE main.cpp)
+target_sources(JUCE-Dante-TestApp PRIVATE
+    main.cpp
+    dante-dep-sdk/src/DanteAudio.cpp
+)
 
 target_compile_definitions(JUCE-Dante-TestApp PRIVATE
     JUCE_WEB_BROWSER=0
