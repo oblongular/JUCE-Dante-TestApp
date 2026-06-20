@@ -3,7 +3,7 @@ get_filename_component(_DANTE_SDK_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 # The test app links against the committed prebuilt — no source compilation required
 add_library(dante_buffer_client STATIC IMPORTED GLOBAL)
 set_target_properties(dante_buffer_client PROPERTIES
-    IMPORTED_LOCATION "${_DANTE_SDK_ROOT}/lib/libdep_audio.a"
+    IMPORTED_LOCATION "${_DANTE_SDK_ROOT}/lib/libDanteAudio.a"
     INTERFACE_INCLUDE_DIRECTORIES "${_DANTE_SDK_ROOT}/include"
 )
 target_link_libraries(dante_buffer_client INTERFACE pthread rt)
@@ -14,7 +14,7 @@ add_library(dante_audio_impl OBJECT "${_DANTE_SDK_ROOT}/src/DanteAudio.cpp")
 target_include_directories(dante_audio_impl PRIVATE "${_DANTE_SDK_ROOT}/include")
 
 set(_DANTE_DIST_DIR "${CMAKE_BINARY_DIR}/dante-dep-sdk")
-set(_DANTE_DIST_LIB "${_DANTE_DIST_DIR}/lib/libdep_audio.a")
+set(_DANTE_DIST_LIB "${_DANTE_DIST_DIR}/lib/libDanteAudio.a")
 
 add_custom_command(
     OUTPUT "${_DANTE_DIST_LIB}"
