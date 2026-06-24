@@ -87,10 +87,10 @@ index 5ceb05a833..9083ef4d73 100644
 +#endif
 diff --git a/modules/juce_audio_devices/native/juce_Dante.cpp b/modules/juce_audio_devices/native/juce_Dante.cpp
 new file mode 100644
-index 0000000000..21f5c6d3a6
+index 0000000000..42d0ee0e3c
 --- /dev/null
 +++ b/modules/juce_audio_devices/native/juce_Dante.cpp
-@@ -0,0 +1,339 @@
+@@ -0,0 +1,344 @@
 +namespace juce
 +{
 +namespace DanteClasses
@@ -131,6 +131,7 @@ index 0000000000..21f5c6d3a6
 +          periodSize (initialPeriodSize)
 +    {
 +        mContext.registerBlockAccessor (&mAccessor);
++        allocateBuffers();
 +    }
 +
 +    ~DanteAudioIODevice() override
@@ -268,6 +269,16 @@ index 0000000000..21f5c6d3a6
 +        }
 +    }
 +
++    void allocateBuffers()
++    {
++        inputStorage.assign  (numInputs,  std::vector<float> (periodSize, 0.0f));
++        outputStorage.assign (numOutputs, std::vector<float> (periodSize, 0.0f));
++        inputPtrs.resize  (numInputs);
++        outputPtrs.resize (numOutputs);
++        for (unsigned i = 0; i < numInputs;  ++i)  inputPtrs[i]  = inputStorage[i].data();
++        for (unsigned i = 0; i < numOutputs; ++i)  outputPtrs[i] = outputStorage[i].data();
++    }
++
 +    void reconfigureChannels (const Dante::BufferView::PollInfo& poll)
 +    {
 +        mAccessor.setChannels (false);  // asymmetric: full TX and RX independently
@@ -277,13 +288,7 @@ index 0000000000..21f5c6d3a6
 +        sampleRate = poll.mSamplerate;
 +        periodSize = mBufferView.getPeriodSizeFrames();
 +
-+        inputStorage.assign  (numInputs,  std::vector<float> (periodSize, 0.0f));
-+        outputStorage.assign (numOutputs, std::vector<float> (periodSize, 0.0f));
-+
-+        inputPtrs.resize  (numInputs);
-+        outputPtrs.resize (numOutputs);
-+        for (unsigned i = 0; i < numInputs;  ++i)  inputPtrs[i]  = inputStorage[i].data();
-+        for (unsigned i = 0; i < numOutputs; ++i)  outputPtrs[i] = outputStorage[i].data();
++        allocateBuffers();
 +
 +        activeInputChannels  = BigInteger();
 +        activeInputChannels .setRange (0, (int) numInputs,  true);
