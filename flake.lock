@@ -1,12 +1,41 @@
 {
   "nodes": {
+    "dante-dep-client-sdk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782015912,
+        "narHash": "sha256-cPA/ixj0TCtrIUcGvx160cSHDgjtwcHa+IoQu1eucV4=",
+        "owner": "oblongular",
+        "repo": "Dante-DEP-Client-SDK",
+        "rev": "98e839ad161ea4ace05869b5f17de5bd32d4f13e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oblongular",
+        "repo": "Dante-DEP-Client-SDK",
+        "type": "github"
+      }
+    },
+    "juce-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782123669,
+        "narHash": "sha256-oXFYfFqySW2XtM1e5/ifxAp9qSIVLzY1WAUKE3EscoQ=",
+        "type": "tarball",
+        "url": "https://github.com/juce-framework/JUCE/archive/refs/tags/8.0.14.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/juce-framework/JUCE/archive/refs/tags/8.0.14.tar.gz"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1780453794,
-        "narHash": "sha256-bXMRa9VTsHSPXL4Cw8R6JJLQeY3Y/IP4+YJCYVmQ7FY=",
+        "lastModified": 1782116945,
+        "narHash": "sha256-G3tw/IXmaH6IQ2upZvhuN9sG8CkuX+BLuJDpE8hz0Ds=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6b316287bae2ee04c9b93c8c858d930fd07d7338",
+        "rev": "34268251cf5547d39063f2c5ea9a196246f7f3a6",
         "type": "github"
       },
       "original": {
@@ -18,6 +47,8 @@
     },
     "root": {
       "inputs": {
+        "dante-dep-client-sdk": "dante-dep-client-sdk",
+        "juce-src": "juce-src",
         "nixpkgs": "nixpkgs"
       }
     }

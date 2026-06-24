@@ -11,23 +11,22 @@ as a standard JUCE `AudioIODevice`.
 
 ## Dependencies
 
-| Dependency | Location |
+| Dependency | Source |
 |---|---|
-| JUCE (fork with Dante backend) | `../JUCE` (`add-dante-backend` branch) |
-| Dante DEP SDK | `../Dante-DEP-Client-SDK` |
+| JUCE 8.0.14 + Dante backend patch | fetched by Nix from `github.com/juce-framework/JUCE` |
+| Dante DEP Client SDK | fetched by Nix from `github.com/oblongular/Dante-DEP-Client-SDK` |
 | Dante Embedded Platform (DEP) | must be running on the system for Dante device to appear |
 | Nix (provides the build toolchain) | system |
 
 ## Setup
 
-Clone all three repositories side by side:
+Clone the repository:
 
 ```sh
 git clone git@github.com:oblongular/JUCE-Dante-TestApp.git
-git clone git@github.com:oblongular/JUCE.git
-git clone git@github.com:oblongular/Dante-DEP-Client-SDK.git
-git -C JUCE checkout add-dante-backend
 ```
+
+JUCE and the Dante DEP Client SDK are fetched and managed automatically by the Nix flake.
 
 ## Build
 
