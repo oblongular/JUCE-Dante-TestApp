@@ -95,5 +95,6 @@ Press `Ctrl+C` to stop the loopback.
 On Ubuntu the binary runs as-is. On NixOS, use `steam-run` to provide an FHS-compatible environment:
 
 ```sh
-NIXPKGS_ALLOW_UNFREE=1 nix run nixpkgs#steam-run --impure -- ./JUCE-Dante-TestApp
+chmod +x ./Defeedback
+NIXPKGS_ALLOW_UNFREE=1 nix run nixpkgs#steam-run --impure -- ./Defeedback
 ```
