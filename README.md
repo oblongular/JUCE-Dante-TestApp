@@ -92,7 +92,11 @@ Press `Ctrl+C` to stop the loopback.
 
 ## Running a binary built outside Nix
 
-On Ubuntu the binary runs as-is. On NixOS, use `steam-run` to provide an FHS-compatible environment:
+On Ubuntu, one may build and run this test application.
+A binary compiled on Ubuntu will not "just run" on NixOS
+due to differences in shared library paths.
+
+On NixOS, use `steam-run` to provide an FHS-compatible environment:
 
 ```sh
 chmod +x ./Defeedback
