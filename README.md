@@ -89,3 +89,11 @@ Press `Ctrl+C` to stop the loopback.
 |---|---|
 | `-l <name>` | Device name to use for loopback |
 | `-t <us>` | Dante TX latency in microseconds (default: 1000) |
+
+## Running a binary built outside Nix
+
+On Ubuntu the binary runs as-is. On NixOS, use `steam-run` to provide an FHS-compatible environment:
+
+```sh
+NIXPKGS_ALLOW_UNFREE=1 nix run nixpkgs#steam-run --impure -- ./JUCE-Dante-TestApp
+```
