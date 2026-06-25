@@ -87,20 +87,21 @@ index 5ceb05a833..9083ef4d73 100644
 +#endif
 diff --git a/modules/juce_audio_devices/native/juce_Dante.cpp b/modules/juce_audio_devices/native/juce_Dante.cpp
 new file mode 100644
-index 0000000000..42d0ee0e3c
+index 0000000000..98e16d813f
 --- /dev/null
 +++ b/modules/juce_audio_devices/native/juce_Dante.cpp
-@@ -0,0 +1,344 @@
+@@ -0,0 +1,345 @@
 +namespace juce
 +{
 +namespace DanteClasses
 +{
 +
-+static constexpr unsigned kDefaultSampleRate  = 48000;
-+static constexpr unsigned kDefaultNumChannels = 8;
-+static constexpr unsigned kDefaultPeriodSize  = 64;
-+static constexpr unsigned kDefaultTxLatencyUs = 1000;  // 1ms on Linux
-+static constexpr int      kInactiveTimeoutMs  = 1000;  // disconnect after 1s inactivity
++static constexpr const char* kEndpointName      = "DanteEP";
++static constexpr unsigned    kDefaultSampleRate  = 48000;
++static constexpr unsigned    kDefaultNumChannels = 8;
++static constexpr unsigned    kDefaultPeriodSize  = 64;
++static constexpr unsigned    kDefaultTxLatencyUs = 1000;  // 1ms on Linux
++static constexpr int         kInactiveTimeoutMs  = 1000;  // disconnect after 1s inactivity
 +
 +static unsigned gTxLatencyUs = kDefaultTxLatencyUs;
 +
@@ -222,7 +223,7 @@ index 0000000000..42d0ee0e3c
 +    {
 +        while (! threadShouldExit())
 +        {
-+            if (mContext.connect ("DanteEP", false, 1) != 0)
++            if (mContext.connect (kEndpointName, false, 1) != 0)
 +                continue;
 +
 +            runAudioLoop();
@@ -376,7 +377,7 @@ index 0000000000..42d0ee0e3c
 +    void scanForDevices() override
 +    {
 +        Dante::DefaultBufferContext ctx (makeSilentLogger(), 2000, false);
-+        if (ctx.connect ("DanteEP", false, 0) != 0)
++        if (ctx.connect (kEndpointName, false, 0) != 0)
 +        {
 +            cachedName       = "Dante-Not-Present";
 +            cachedNumInputs  = 0;
@@ -384,7 +385,7 @@ index 0000000000..42d0ee0e3c
 +            return;
 +        }
 +
-+        cachedName = "Dante";
++        cachedName = kEndpointName;
 +
 +        const auto result = ctx.wait();
 +        if (result.pollInfo.mState == Dante::BufferView::State::READY)
@@ -420,7 +421,7 @@ index 0000000000..42d0ee0e3c
 +    }
 +
 +private:
-+    String   cachedName       = "Dante-Not-Present";
++    String   cachedName       = kEndpointName;
 +    unsigned cachedNumInputs  = kDefaultNumChannels;
 +    unsigned cachedNumOutputs = kDefaultNumChannels;
 +    unsigned cachedSampleRate = kDefaultSampleRate;
