@@ -3,15 +3,16 @@
     "dante-dep-client-sdk": {
       "flake": false,
       "locked": {
-        "lastModified": 1782015912,
-        "narHash": "sha256-cPA/ixj0TCtrIUcGvx160cSHDgjtwcHa+IoQu1eucV4=",
+        "lastModified": 1782798864,
+        "narHash": "sha256-y5SD6OxPRy9V4i9ADEXfrmStS8Q0BqqkiIHtyW6/EXM=",
         "owner": "oblongular",
         "repo": "Dante-DEP-Client-SDK",
-        "rev": "98e839ad161ea4ace05869b5f17de5bd32d4f13e",
+        "rev": "2ee982ca5945624d10cf1a790b8802b597efaa4c",
         "type": "github"
       },
       "original": {
         "owner": "oblongular",
+        "ref": "futex-wait",
         "repo": "Dante-DEP-Client-SDK",
         "type": "github"
       }
@@ -31,11 +32,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1782116945,
-        "narHash": "sha256-G3tw/IXmaH6IQ2upZvhuN9sG8CkuX+BLuJDpE8hz0Ds=",
+        "lastModified": 1782535326,
+        "narHash": "sha256-ZeRxu4yn6shd3SNF5ZUQb4r7BaVo1zBKMjRhfoNSBmw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "34268251cf5547d39063f2c5ea9a196246f7f3a6",
+        "rev": "714a5f8c4ead6b31148d829288440ed033ccc041",
         "type": "github"
       },
       "original": {
