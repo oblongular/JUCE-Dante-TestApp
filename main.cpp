@@ -78,53 +78,54 @@ struct Loopback : public juce::AudioIODeviceCallback
 };
 
 //==============================================================================
-static bool startLoopback (juce::AudioDeviceManager& manager, const juce::String& deviceName)
+// Opens the named device on the Dante backend directly, via the raw AudioIODeviceType /
+// AudioIODevice interfaces. Deliberately bypasses juce::AudioDeviceManager here: its
+// getAvailableDeviceTypes()/initialise() scan *every* registered backend (ALSA included),
+// which probes ALSA PCMs such as the depasound-backed ones. Since a named Dante endpoint
+// was requested, only the Dante backend should ever be touched.
+static std::unique_ptr<juce::AudioIODevice> startLoopback (const juce::String& deviceName,
+                                                           juce::AudioIODeviceCallback& callback)
 {
-    // Find which backend owns this device name
-    for (auto* type : manager.getAvailableDeviceTypes())
+    std::unique_ptr<juce::AudioIODeviceType> danteType (juce::AudioIODeviceType::createAudioIODeviceType_Dante());
+    if (danteType == nullptr)
     {
-        type->scanForDevices();
-
-        for (auto& name : type->getDeviceNames (false))
-        {
-            if (name == deviceName)
-            {
-                manager.setCurrentAudioDeviceType (type->getTypeName(), true);
-
-                juce::AudioDeviceManager::AudioDeviceSetup setup;
-                manager.getAudioDeviceSetup (setup);
-                setup.outputDeviceName = deviceName;
-                setup.inputDeviceName  = deviceName;
-                setup.useDefaultInputChannels  = false;
-                setup.useDefaultOutputChannels = false;
-                setup.inputChannels .setRange (0, 256, true);
-                setup.outputChannels.setRange (0, 256, true);
-                setup.sampleRate = 0;   // let the device choose
-                setup.bufferSize = 0;
-
-                auto error = manager.setAudioDeviceSetup (setup, true);
-                if (error.isNotEmpty())
-                {
-                    std::cerr << "Error opening device: " << error << "\n";
-                    return false;
-                }
-
-                return true;
-            }
-        }
+        std::cerr << "Dante backend not available in this build\n";
+        return nullptr;
     }
 
-    std::cerr << "Device not found: " << deviceName << "\n";
-    return false;
+    danteType->scanForDevices();
+
+    if (! danteType->getDeviceNames (false).contains (deviceName))
+    {
+        std::cerr << "Device not found: " << deviceName << "\n";
+        return nullptr;
+    }
+
+    std::unique_ptr<juce::AudioIODevice> device (danteType->createDevice (deviceName, deviceName));
+    if (device == nullptr)
+    {
+        std::cerr << "Error creating device: " << deviceName << "\n";
+        return nullptr;
+    }
+
+    juce::BigInteger channels;
+    channels.setRange (0, 256, true);
+
+    auto error = device->open (channels, channels, 0.0, 0);
+    if (error.isNotEmpty())
+    {
+        std::cerr << "Error opening device: " << error << "\n";
+        return nullptr;
+    }
+
+    device->start (&callback);
+    return device;
 }
 
 //==============================================================================
 int main (int argc, char* argv[])
 {
     juce::MessageManager::getInstance();
-
-    juce::AudioDeviceManager manager;
-    manager.initialise (2, 2, nullptr, false);
 
     // Parse arguments
     juce::String loopbackDevice;
@@ -156,22 +157,23 @@ int main (int argc, char* argv[])
 
     if (loopbackDevice.isEmpty())
     {
+        // No named device requested: fine to enumerate every backend (ALSA included).
+        juce::AudioDeviceManager manager;
         listDevices (manager);
     }
     else
     {
+        // A specific Dante endpoint was requested: only ever touch the Dante backend.
         juce::setDanteTxLatencyUs (txLatencyUs);
 
         Loopback loopback;
-        manager.addAudioCallback (&loopback);
-
-        if (!startLoopback (manager, loopbackDevice))
+        auto device = startLoopback (loopbackDevice, loopback);
+        if (device == nullptr)
         {
             juce::MessageManager::deleteInstance();
             return 1;
         }
 
-        auto* device = manager.getCurrentAudioDevice();
         std::signal (SIGINT,  signalHandler);
         std::signal (SIGTERM, signalHandler);
 
@@ -185,8 +187,7 @@ int main (int argc, char* argv[])
         while (gRunning)
             juce::Thread::sleep (100);
 
-        manager.removeAudioCallback (&loopback);
-        manager.closeAudioDevice();
+        device->close();
     }
 
     juce::MessageManager::deleteInstance();
