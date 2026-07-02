@@ -87,10 +87,10 @@ index 5ceb05a833..9083ef4d73 100644
 +#endif
 diff --git a/modules/juce_audio_devices/native/juce_Dante.cpp b/modules/juce_audio_devices/native/juce_Dante.cpp
 new file mode 100644
-index 0000000000..beea4cb341
+index 0000000000..47f0c8c56f
 --- /dev/null
 +++ b/modules/juce_audio_devices/native/juce_Dante.cpp
-@@ -0,0 +1,384 @@
+@@ -0,0 +1,389 @@
 +namespace juce
 +{
 +namespace DanteClasses
@@ -122,7 +122,12 @@ index 0000000000..beea4cb341
 +                        unsigned initialPeriodSize,
 +                        unsigned txLatencyUs)
 +        : AudioIODevice (deviceName, "Dante"),
-+          Thread ("JUCE/Dante-Audio"),
++          // Linux's TASK_COMM_LEN is 16 bytes including the null terminator, so the
++          // usable limit is 15 characters. pthread_setname_np() returns ERANGE (which
++          // JUCE ignores) and leaves the name unchanged if given anything longer -
++          // "JUCE/Dante-Audio" (16 chars) silently failed and left the thread showing
++          // the inherited process name instead. Keep this at 15 characters or fewer.
++          Thread ("JUCE/DanteAudio"),
 +          mContext (makeSilentLogger(), kInactiveTimeoutMs, false),
 +          mBufferView (mContext.getBufferView()),
 +          mAccessor (mBufferView, Dante::BlockAccessorConfig (txLatencyUs)),
