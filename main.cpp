@@ -39,10 +39,14 @@ static void listDevices (juce::AudioDeviceManager& manager)
             int nIn  = dev ? dev->getInputChannelNames().size()  : 0;
             int nOut = dev ? dev->getOutputChannelNames().size() : 0;
 
-            auto chanSpec = juce::String (nIn) + "i|" + juce::String (nOut) + "o";
-            std::printf ("dev: %2d  %7s  %s\n",
+            char istr[10];
+            char ostr[10];
+            std::snprintf (istr, sizeof (istr), "%di", nIn);
+            std::snprintf (ostr, sizeof (ostr), "%do", nOut);
+            std::printf ("dev: %2d %4s|%-4s %s\n",
                          devIndex++,
-                         chanSpec.toRawUTF8(),
+                         istr,
+                         ostr,
                          name.toRawUTF8());
         }
 
