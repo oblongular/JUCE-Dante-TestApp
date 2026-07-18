@@ -3,16 +3,16 @@
     "dante-dep-client-sdk": {
       "flake": false,
       "locked": {
-        "lastModified": 1782798864,
-        "narHash": "sha256-y5SD6OxPRy9V4i9ADEXfrmStS8Q0BqqkiIHtyW6/EXM=",
+        "lastModified": 1784368838,
+        "narHash": "sha256-j57JI9WDRvhQnU0dgxsHxmz2jSwx5mGO6gNehMGavbQ=",
         "owner": "oblongular",
         "repo": "Dante-DEP-Client-SDK",
-        "rev": "2ee982ca5945624d10cf1a790b8802b597efaa4c",
+        "rev": "dcfd3f839637e5253be09522cf8e2d03adb16d69",
         "type": "github"
       },
       "original": {
         "owner": "oblongular",
-        "ref": "futex-wait",
+        "ref": "v0.2.0",
         "repo": "Dante-DEP-Client-SDK",
         "type": "github"
       }

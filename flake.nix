@@ -8,7 +8,7 @@
       flake = false;
     };
     dante-dep-client-sdk = {
-      url = "github:oblongular/Dante-DEP-Client-SDK/futex-wait";
+      url = "github:oblongular/Dante-DEP-Client-SDK/v0.2.0";
       flake = false;
     };
   };
