@@ -3,16 +3,16 @@
     "dante-dep-client-sdk": {
       "flake": false,
       "locked": {
-        "lastModified": 1784368838,
-        "narHash": "sha256-j57JI9WDRvhQnU0dgxsHxmz2jSwx5mGO6gNehMGavbQ=",
+        "lastModified": 1784376439,
+        "narHash": "sha256-zX2OljJhBr8fcpt5tH3W0IzdEg/dTMNAUrtRT+Eh1gM=",
         "owner": "oblongular",
         "repo": "Dante-DEP-Client-SDK",
-        "rev": "dcfd3f839637e5253be09522cf8e2d03adb16d69",
+        "rev": "1d78a64b6cf22256a2a3effa33cc886c8fbaf56e",
         "type": "github"
       },
       "original": {
         "owner": "oblongular",
-        "ref": "v0.2.0",
+        "ref": "v0.2.1",
         "repo": "Dante-DEP-Client-SDK",
         "type": "github"
       }
@@ -20,16 +20,16 @@
     "juce-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1784371037,
-        "narHash": "sha256-RsuD+I1xaFjcH7o0++LAKw7XPvMrzu4WMMoxxpg4vIk=",
+        "lastModified": 1784377245,
+        "narHash": "sha256-grLJZbHGzxOgRoAV5lg19hpGaqENJcfeO9DgZmdcr+g=",
         "owner": "oblongular",
         "repo": "JUCE",
-        "rev": "febd3c408ddcda64d37698969f907305f6760619",
+        "rev": "09830ae41991a1c952a95b2a9eabe94817c6adf3",
         "type": "github"
       },
       "original": {
         "owner": "oblongular",
-        "ref": "dante-v0.2.0",
+        "ref": "dante-v0.2.2",
         "repo": "JUCE",
         "type": "github"
       }

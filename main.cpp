@@ -132,46 +132,57 @@ int main (int argc, char* argv[])
     juce::MessageManager::getInstance();
 
     // Parse arguments
-    juce::String loopbackDevice;
-    unsigned txLatencyUs = 1000;   // default matches kDefaultTxLatencyUs in juce_Dante.cpp
+    bool          runLoopback = false;
+    juce::String  shmName     = "DanteEP";
+    unsigned      txLeadUs    = 1000;   // default matches kDefaultTxLeadUs in juce_Dante.cpp
+    unsigned      rxLagUs     = 0;      // default matches kDefaultRxLagUs in juce_Dante.cpp
 
     for (int i = 1; i < argc; ++i)
     {
         auto arg = juce::String (argv[i]);
-        if (arg == "-l" && i + 1 < argc)
-            loopbackDevice = argv[++i];
-        else if (arg == "-t" && i + 1 < argc)
-            txLatencyUs = (unsigned) std::atoi (argv[++i]);
+        if (arg == "-l" || arg == "--loopback")
+            runLoopback = true;
+        else if ((arg == "-s" || arg == "--shm") && i + 1 < argc)
+            shmName = argv[++i];
+        else if ((arg == "-t" || arg == "--txlead") && i + 1 < argc)
+            txLeadUs = (unsigned) std::atoi (argv[++i]);
+        else if ((arg == "-r" || arg == "--rxlag") && i + 1 < argc)
+            rxLagUs = (unsigned) std::atoi (argv[++i]);
         else
         {
             juce::String bin (argv[0]);
             auto slash = bin.lastIndexOfChar ('/');
             if (slash >= 0) bin = bin.substring (slash + 1);
             std::cerr << "Usage:\n"
-                      << "  " << bin << "              List available audio devices\n"
-                      << "  " << bin << " -l <name>    Run loopback on named device\n"
+                      << "  " << bin << "                  List available audio devices\n"
+                      << "  " << bin << " -l|--loopback    Run loopback on the Dante endpoint\n"
                       << "\n"
                       << "Options:\n"
-                      << "  -l <name>   Device name to use for loopback\n"
-                      << "  -t <us>     Dante TX latency in microseconds (default: 1000)\n";
+                      << "  -l, --loopback       Run loopback mode\n"
+                      << "  -s, --shm <name>     DEP shared-memory endpoint name (default: DanteEP)\n"
+                      << "  -t, --txlead <us>    Dante TX lead in microseconds (default: 1000)\n"
+                      << "  -r, --rxlag <us>     Dante RX lag in microseconds (default: 0)\n";
             juce::MessageManager::deleteInstance();
             return 1;
         }
     }
 
-    if (loopbackDevice.isEmpty())
+    // Applies to both modes below: list mode also scans via this endpoint name.
+    juce::setDanteShmName (shmName);
+    juce::setDanteTxLeadUs (txLeadUs);
+    juce::setDanteRxLagUs (rxLagUs);
+
+    if (! runLoopback)
     {
-        // No named device requested: fine to enumerate every backend (ALSA included).
+        // No loopback requested: fine to enumerate every backend (ALSA included).
         juce::AudioDeviceManager manager;
         listDevices (manager);
     }
     else
     {
-        // A specific Dante endpoint was requested: only ever touch the Dante backend.
-        juce::setDanteTxLatencyUs (txLatencyUs);
-
+        // Loopback requested: only ever touch the Dante backend.
         Loopback loopback;
-        auto device = startLoopback (loopbackDevice, loopback);
+        auto device = startLoopback (shmName, loopback);
         if (device == nullptr)
         {
             juce::MessageManager::deleteInstance();
@@ -186,7 +197,8 @@ int main (int argc, char* argv[])
                   << "  Buffer size : " << device->getCurrentBufferSizeSamples() << " samples\n"
                   << "  Inputs      : " << device->getActiveInputChannels().countNumberOfSetBits() << "\n"
                   << "  Outputs     : " << device->getActiveOutputChannels().countNumberOfSetBits() << "\n"
-                  << "  TX latency  : " << txLatencyUs << " us\n";
+                  << "  TX lead     : " << txLeadUs << " us\n"
+                  << "  RX lag      : " << rxLagUs << " us\n";
 
         while (gRunning)
             juce::Thread::sleep (100);

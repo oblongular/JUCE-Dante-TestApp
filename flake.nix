@@ -4,11 +4,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     juce-src = {
-      url = "github:oblongular/JUCE/dante-v0.2.0";
+      url = "github:oblongular/JUCE/dante-v0.2.2";
       flake = false;
     };
     dante-dep-client-sdk = {
-      url = "github:oblongular/Dante-DEP-Client-SDK/v0.2.0";
+      url = "github:oblongular/Dante-DEP-Client-SDK/v0.2.1";
       flake = false;
     };
   };
