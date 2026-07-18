@@ -13,7 +13,7 @@ as a standard JUCE `AudioIODevice`.
 
 | Dependency | Source |
 |---|---|
-| JUCE 8.0.14 + Dante backend patch | fetched by Nix from `github.com/juce-framework/JUCE` |
+| JUCE 8.0.14 + Dante backend | fetched by Nix from `github.com/oblongular/JUCE`, `add-dante-backend` branch |
 | Dante DEP Client SDK | fetched by Nix from `github.com/oblongular/Dante-DEP-Client-SDK` |
 | Dante Embedded Platform (DEP) | must be running on the system for Dante device to appear |
 | Nix (provides the build toolchain) | system |
@@ -60,25 +60,44 @@ dev:  1  32i|32o  Dante
 
 If the Dante Embedded Platform is not running, the Dante entry will appear as `0i|0o  Dante-Not-Present`.
 
-### Loopback on a device
+### Loopback on the Dante endpoint
 
 ```sh
-./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l <device-name>
+./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l
 ```
 
-### Loopback with custom Dante TX latency
+Defaults to the `DanteEP` shared-memory endpoint. Use `-s`/`--shm` to target a
+different one:
 
 ```sh
-./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l <device-name> -t <microseconds>
+./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l -s <name>
 ```
 
-The `-t` option sets the Dante TX latency in microseconds (default: 1000µs).
-Lower values reduce loopback latency but increase the risk of glitches.
-
-To use 32 samples @ 48kHz (i.e. 667µs), we can run the test app like so:
+### Loopback with custom TX lead / RX lag
 
 ```sh
-rt-run-dsp.sh /tmp/JUCE-Dante-TestApp -l Dante -t 667
+./build/JUCE-Dante-TestApp_artefacts/JUCE-Dante-TestApp -l -t <microseconds> -r <microseconds>
+```
+
+`-t`/`--txlead` keeps the write cursor ahead of DEP's live edge (default: 1000µs);
+`-r`/`--rxlag` keeps the read cursor behind it (default: 0µs). Both are one-way
+added latency — lower values reduce loopback latency but increase the risk of
+glitches. See the [Dante DEP Client SDK's diagram](https://github.com/oblongular/Dante-DEP-Client-SDK/blob/main/docs/txlead-rxlag.svg)
+for the underlying mechanism.
+
+**Rounding**: the SDK converts `-t`/`-r`'s microsecond value to frames via
+*truncating* integer division (`frames = us × sampleRate / 1e6`, floored, not
+rounded) — see `DanteAudio.cpp`'s `reset()`. At 48kHz, 1 frame = 20.833...µs, so
+most microsecond values don't land on a whole frame boundary, and the result
+always rounds **down**. To guarantee at least N frames, round the µs value
+**up**, not to the nearest integer:
+
+- 32 frames = 666.666...µs exactly. `666` floors to `31` frames (one short);
+  `667` floors to `32.016` → `32` frames (correct) — `667` is the *smallest*
+  integer µs value that still reaches 32, not an arbitrary rounding.
+
+```sh
+rt-run-dsp.sh /tmp/JUCE-Dante-TestApp -l -t 667
 ```
 
 Press `Ctrl+C` to stop the loopback.
@@ -87,8 +106,10 @@ Press `Ctrl+C` to stop the loopback.
 
 | Option | Description |
 |---|---|
-| `-l <name>` | Device name to use for loopback |
-| `-t <us>` | Dante TX latency in microseconds (default: 1000) |
+| `-l, --loopback` | Run loopback mode |
+| `-s, --shm <name>` | DEP shared-memory endpoint name (default: `DanteEP`) |
+| `-t, --txlead <us>` | Dante TX lead in microseconds (default: 1000) |
+| `-r, --rxlag <us>` | Dante RX lag in microseconds (default: 0) |
 
 ## Running a binary built outside Nix
 

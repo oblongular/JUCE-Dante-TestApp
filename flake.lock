@@ -3,16 +3,16 @@
     "dante-dep-client-sdk": {
       "flake": false,
       "locked": {
-        "lastModified": 1784376439,
-        "narHash": "sha256-zX2OljJhBr8fcpt5tH3W0IzdEg/dTMNAUrtRT+Eh1gM=",
+        "lastModified": 1784379122,
+        "narHash": "sha256-aQdJn/jGebGUjjvL8ARrFYJfwXZQnzsGkCieEx2ZbiU=",
         "owner": "oblongular",
         "repo": "Dante-DEP-Client-SDK",
-        "rev": "1d78a64b6cf22256a2a3effa33cc886c8fbaf56e",
+        "rev": "57eb98e546775a23d2ad7b24c64cb7c9a0443cc3",
         "type": "github"
       },
       "original": {
         "owner": "oblongular",
-        "ref": "v0.2.1",
+        "ref": "v0.2.3",
         "repo": "Dante-DEP-Client-SDK",
         "type": "github"
       }

@@ -8,7 +8,7 @@
       flake = false;
     };
     dante-dep-client-sdk = {
-      url = "github:oblongular/Dante-DEP-Client-SDK/v0.2.1";
+      url = "github:oblongular/Dante-DEP-Client-SDK/v0.2.3";
       flake = false;
     };
   };
