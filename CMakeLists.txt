@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(JUCE-Dante-TestApp VERSION 1.0.0)
+project(JUCE-Dante-TestApp VERSION 0.2.3)
 
 # Resolve dependency paths: CMake variable > environment variable > sibling directory
 if(NOT JUCE_DIR)

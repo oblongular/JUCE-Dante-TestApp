@@ -13,7 +13,7 @@ as a standard JUCE `AudioIODevice`.
 
 | Dependency | Source |
 |---|---|
-| JUCE 8.0.14 + Dante backend | fetched by Nix from `github.com/oblongular/JUCE`, `add-dante-backend` branch |
+| JUCE 8.0.14 + Dante backend | fetched by Nix from `github.com/oblongular/JUCE`, pinned to a tag on `add-dante-backend` (currently `dante-v0.2.2`) |
 | Dante DEP Client SDK | fetched by Nix from `github.com/oblongular/Dante-DEP-Client-SDK` |
 | Dante Embedded Platform (DEP) | must be running on the system for Dante device to appear |
 | Nix (provides the build toolchain) | system |
