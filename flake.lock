@@ -20,14 +20,18 @@
     "juce-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1782123669,
-        "narHash": "sha256-oXFYfFqySW2XtM1e5/ifxAp9qSIVLzY1WAUKE3EscoQ=",
-        "type": "tarball",
-        "url": "https://github.com/juce-framework/JUCE/archive/refs/tags/8.0.14.tar.gz"
+        "lastModified": 1784371037,
+        "narHash": "sha256-RsuD+I1xaFjcH7o0++LAKw7XPvMrzu4WMMoxxpg4vIk=",
+        "owner": "oblongular",
+        "repo": "JUCE",
+        "rev": "febd3c408ddcda64d37698969f907305f6760619",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://github.com/juce-framework/JUCE/archive/refs/tags/8.0.14.tar.gz"
+        "owner": "oblongular",
+        "ref": "dante-v0.2.0",
+        "repo": "JUCE",
+        "type": "github"
       }
     },
     "nixpkgs": {

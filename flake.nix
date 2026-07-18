@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     juce-src = {
-      url = "https://github.com/juce-framework/JUCE/archive/refs/tags/8.0.14.tar.gz";
+      url = "github:oblongular/JUCE/dante-v0.2.0";
       flake = false;
     };
     dante-dep-client-sdk = {
@@ -21,12 +21,6 @@
       perSystem = system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-
-          juce-patched = pkgs.applyPatches {
-            name = "juce-src-patched";
-            src = juce-src;
-            patches = [ ./JUCE-add-dante-backend.patch ];
-          };
 
           buildInputs = with pkgs; [
             alsa-lib
@@ -52,7 +46,7 @@
             inherit buildInputs;
 
             cmakeFlags = [
-              "-DJUCE_DIR=${juce-patched}"
+              "-DJUCE_DIR=${juce-src}"
               "-DDANTE_SDK_DIR=${dante-dep-client-sdk}"
             ];
 
@@ -76,7 +70,7 @@
             ]);
 
             shellHook = ''
-              export JUCE_DIR="${juce-patched}"
+              export JUCE_DIR="${juce-src}"
               export DANTE_SDK_DIR="${dante-dep-client-sdk}"
             '';
           };
