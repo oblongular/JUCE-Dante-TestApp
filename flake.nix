@@ -39,7 +39,7 @@
         in {
           package = pkgs.stdenv.mkDerivation {
             pname = "JUCE-Dante-TestApp";
-            version = "1.0.0";
+            version = "0.2.3";
             src = ./.;
 
             nativeBuildInputs = with pkgs; [ cmake pkg-config clang ];
